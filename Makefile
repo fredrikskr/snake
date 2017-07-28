@@ -1,6 +1,5 @@
 CC = gcc
 CFLAGS=-I.
-MONTH := $(shell date +%B)
 
 all: bin/snake
 

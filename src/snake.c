@@ -123,7 +123,6 @@ char getPlayingFieldCellValue(playingField_t *PF, int xPos, int yPos){
 }
 
 void putStartSnakeOnPlayingField(playingField_t *PF, node_t *snakeTail){
-    printf("asdasd");
     while(snakeTail != NULL){
         editPlayingFieldCell(PF, snakeTail);
         snakeTail = snakeTail->next;
@@ -316,8 +315,7 @@ void *readKeyboard(void *vargp){
     TCSANOW tells tcsetattr to change attributes immediately. */
     tcsetattr( STDIN_FILENO, TCSANOW, &newt);
 
-    /*This is your part:
-    I choose 'e' to end input. Notice that EOF is also turned off
+    /*I choose 'q' to end input. Notice that EOF is also turned off
     in the non-canonical mode*/
     while((keyPressed=getchar())!= 'q'){
         //if(c == 'a' || c == 'd' || c == 'w' || c == 's'){    
@@ -360,10 +358,6 @@ void startSnakeGame(){
     mqd_t actionMqReader;
     initActionMq(&actionMqReader, O_CREAT | O_RDONLY | O_NONBLOCK);
 
-    //pthread_mutex_t actionLock = PTHREAD_MUTEX_INITIALIZER;
-    pthread_t keyboardReader;
-    pthread_create(&keyboardReader, NULL, readKeyboard, NULL);
-
     char *threadPointer;
     
     int alive = 1;
@@ -374,11 +368,16 @@ void startSnakeGame(){
 
     playingField_t *playingField = newPlayingField(FIELD_LENGTH_X, FIELD_LENGTH_Y);
     snake_t *snake = newSnake(FIELD_LENGTH_X/2,FIELD_LENGTH_Y-1); 
-    /*
+    
     printf("************** SNAKE **************\n");
     printf("Controls are WASD and 'q' to quit.\n");
-    printf("Press 'w', 'a', 's' or 'd' to start\n");
-    */
+    printf("Press ENTER to start\n");
+    while( getchar() != '\n' );
+    
+    //pthread_mutex_t actionLock = PTHREAD_MUTEX_INITIALIZER;
+    pthread_t keyboardReader;
+    pthread_create(&keyboardReader, NULL, readKeyboard, NULL);
+    
     printPlayingField(playingField); 
     putStartSnakeOnPlayingField(playingField, snake->tail);    
     placeFood(playingField, snake);

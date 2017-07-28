@@ -22,8 +22,7 @@ int main(void){
     TCSANOW tells tcsetattr to change attributes immediately. */
     tcsetattr( STDIN_FILENO, TCSANOW, &newt);
 
-    /*This is your part:
-    I choose 'e' to end input. Notice that EOF is also turned off
+    /*I choose 'q' to end input. Notice that EOF is also turned off
     in the non-canonical mode*/
     while((c=getchar())!= 'q')      
         if(c=='a')
